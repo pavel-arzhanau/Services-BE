@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { IRegion } from './dto';
+import { IRegion } from 'src/dto';
 
 @Controller('region')
 export class RegionController {
