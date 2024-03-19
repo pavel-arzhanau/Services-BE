@@ -9,6 +9,6 @@ export class RegionService {
 
   async getRegions(): Promise<IRegion[]> {
     const regions = await this.regionRepository.findAll();
-    return regions.map(({ id, name }) => ({ id, name }));
+    return regions;
   }
 }
