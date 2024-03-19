@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RegionsModule } from './regions/regions.module';
+import { CategoriesModule } from './categories/categories.module';
 import { ConfigModule } from '@nestjs/config';
 import { Region } from './regions/regions.model';
 
@@ -22,6 +23,7 @@ import { Region } from './regions/regions.model';
       autoLoadModels: true,
     }),
     RegionsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

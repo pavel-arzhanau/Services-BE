@@ -4,7 +4,7 @@ interface RegionCreationAttributes {
   name: string;
 }
 
-@Table({ tableName: 'regions' })
+@Table({ tableName: 'regions', timestamps: false })
 export class Region extends Model<Region, RegionCreationAttributes> {
   @Column({
     type: DataType.INTEGER,
