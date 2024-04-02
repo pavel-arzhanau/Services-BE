@@ -4,6 +4,7 @@ interface UserCreationAttributes {
   name: string;
   phone: string;
   password: string;
+  refreshToken: string;
 }
 
 @Table({ tableName: 'users' })

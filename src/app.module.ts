@@ -6,6 +6,7 @@ import { RegionsModule } from './regions/regions.module';
 import { CategoriesModule } from './categories/categories.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import { Region } from './regions/regions.model';
 
 @Module({
@@ -24,8 +25,9 @@ import { Region } from './regions/regions.model';
       autoLoadModels: true,
     }),
     RegionsModule,
-    CategoriesModule,
     UsersModule,
+    CategoriesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
