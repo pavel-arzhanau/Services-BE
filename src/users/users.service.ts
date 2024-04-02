@@ -22,10 +22,7 @@ export class UserService {
   }
 
   async getUserById(id: number) {
-    const user = await this.userRepository.findOne({
-      where: { id },
-      include: { all: true },
-    });
+    const user = await this.userRepository.findByPk(id);
 
     return user;
   }
