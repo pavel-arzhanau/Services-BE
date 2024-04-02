@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto';
 import { AuthDto } from './dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -59,8 +59,11 @@ export class AuthController {
   }
 
   @Get('logout')
-  logout(@Req() req) {
-    this.authService.logout(req.user['sub']);
+  async logout(@Req() req: Request, @Res() res: Response) {
+    const { refreshToken } = req.cookies;
+    await this.authService.logout(refreshToken);
+    res.clearCookie('refreshToken');
+    return res.send(200);
   }
 
   @Get('refresh')

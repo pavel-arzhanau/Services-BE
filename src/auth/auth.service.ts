@@ -61,8 +61,14 @@ export class AuthService {
     return { ...tokens, user };
   }
 
-  async logout(userId: number) {
-    return this.userService.updateUser(userId, { refreshToken: null });
+  async logout(refreshToken: string) {
+    const tokenData = this.tokenRepository.destroy({
+      where: {
+        refreshToken,
+      },
+    });
+
+    return tokenData;
   }
 
   async getTokens(userId: number, username: string) {
@@ -99,7 +105,6 @@ export class AuthService {
     userId: number,
     refreshToken: string,
   ): Promise<Token> {
-    const hashedRefreshToken = await this.hashData(refreshToken);
     const tokenData = await this.tokenRepository.findOne({
       where: { userId },
       include: { all: true },
@@ -108,20 +113,15 @@ export class AuthService {
     if (tokenData) {
       return tokenData.update({
         ...tokenData,
-        refreshToken: hashedRefreshToken,
+        refreshToken,
       });
     }
 
     const token = await this.tokenRepository.create({
       userId,
-      refreshToken: hashedRefreshToken,
+      refreshToken,
     });
 
     return token;
-  }
-
-  async hashData(data: string): Promise<string> {
-    const hashPassword = await bcrypt.hash(data, 5);
-    return hashPassword;
   }
 }
