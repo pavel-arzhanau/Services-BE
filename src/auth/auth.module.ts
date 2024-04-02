@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Token } from './tokens.model';
@@ -11,9 +11,10 @@ import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
   controllers: [AuthController],
   imports: [
     SequelizeModule.forFeature([Token]),
-    UsersModule,
     JwtModule.register({}),
+    forwardRef(() => UsersModule),
   ],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

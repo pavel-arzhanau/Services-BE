@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto, IUser } from 'src/users/dto';
 import { UserService } from 'src/users/users.service';
@@ -123,5 +124,58 @@ export class AuthService {
     });
 
     return token;
+  }
+
+  async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw new UnauthorizedException();
+    }
+
+    const userData = this.validateRefreshToken(refreshToken);
+    const tokenFromDb = this.findToken(refreshToken);
+
+    if (!userData || !tokenFromDb) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.userService.getUserById(userData.id);
+    const tokens = await this.getTokens(user.id, user.name);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    return { ...tokens, user };
+  }
+
+  validateAccessToken(token: string) {
+    try {
+      const userData = this.jwtService.verify(token, {
+        secret: process.env.JWT_ACCESS_SECRET,
+      });
+
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  validateRefreshToken(token: string) {
+    try {
+      const userData = this.jwtService.verify(token, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async findToken(refreshToken: string) {
+    const tokenData = this.tokenRepository.findOne({
+      where: {
+        refreshToken,
+      },
+      include: { all: true },
+    });
+
+    return tokenData;
   }
 }

@@ -21,6 +21,15 @@ export class UserService {
     return user;
   }
 
+  async getUserById(id: number) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      include: { all: true },
+    });
+
+    return user;
+  }
+
   async updateUser(id: number, updateUserDto) {
     const user = await this.userRepository.findByPk(id);
     if (!user) {
