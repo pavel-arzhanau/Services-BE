@@ -41,7 +41,7 @@ export class AuthService {
       password: hashPassword,
     });
 
-    const tokens = await this.getTokens(user.id, user.name);
+    const tokens = await this.getTokens(user.id, user.phone);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return { ...tokens, user };
   }
@@ -57,7 +57,7 @@ export class AuthService {
       throw new BadRequestException('Password is incorrect');
     }
 
-    const tokens = await this.getTokens(user.id, user.name);
+    const tokens = await this.getTokens(user.id, user.phone);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return { ...tokens, user };
   }
@@ -72,12 +72,12 @@ export class AuthService {
     return tokenData;
   }
 
-  async getTokens(userId: number, username: string) {
+  async getTokens(userId: number, phone: string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          sub: userId,
-          username,
+          id: userId,
+          phone,
         },
         {
           secret: process.env.JWT_ACCESS_SECRET,
@@ -86,8 +86,8 @@ export class AuthService {
       ),
       this.jwtService.signAsync(
         {
-          sub: userId,
-          username,
+          id: userId,
+          phone,
         },
         {
           secret: process.env.JWT_REFRESH_SECRET,
@@ -139,7 +139,7 @@ export class AuthService {
     }
 
     const user = await this.userService.getUserById(userData.id);
-    const tokens = await this.getTokens(user.id, user.name);
+    const tokens = await this.getTokens(user.id, user.phone);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return { ...tokens, user };
   }

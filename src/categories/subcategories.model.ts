@@ -28,7 +28,7 @@ export class Subcategory extends Model<
 
   @Column({
     type: DataType.STRING,
-    unique: true,
+    unique: false,
     allowNull: false,
   })
   name: string;
