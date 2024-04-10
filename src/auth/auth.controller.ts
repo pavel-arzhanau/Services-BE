@@ -78,8 +78,10 @@ export class AuthController {
 
   @Get('refresh')
   async refresh(@Req() req: Request, @Res() res: Response) {
-    const { refreshToken } = req.cookies;
-    await this.authService.refresh(refreshToken);
+    const { refreshToken: refreshTokenFromCookies } = req.cookies;
+    const { refreshToken, accessToken, user } = await this.authService.refresh(
+      refreshTokenFromCookies,
+    );
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -88,6 +90,16 @@ export class AuthController {
 
     return res.send({
       refreshToken,
+      accessToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        description: user.description,
+        email: user.email,
+        phone: user.phone,
+        photo: user.photo,
+        rating: user.rating,
+      },
     });
   }
 }
