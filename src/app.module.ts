@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RegionsModule } from './regions/regions.module';
 import { CategoriesModule } from './categories/categories.module';
+import { AdsModule } from './ads/ads.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -28,6 +29,7 @@ import { Region } from './regions/regions.model';
     UsersModule,
     CategoriesModule,
     AuthModule,
+    AdsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

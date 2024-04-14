@@ -5,8 +5,10 @@ import {
   DataType,
   BelongsTo,
   ForeignKey,
+  HasMany,
 } from 'sequelize-typescript';
 import { Category } from './categories.model';
+import { Ad } from 'src/ads/ads.model';
 
 interface SubcategoryCreationAttributes {
   name: string;
@@ -39,4 +41,7 @@ export class Subcategory extends Model<
 
   @BelongsTo(() => Category)
   category: Category;
+
+  @HasMany(() => Ad)
+  ads: Ad[];
 }

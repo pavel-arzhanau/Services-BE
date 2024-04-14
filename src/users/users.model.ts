@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Ad } from 'src/ads/ads.model';
 
 interface UserCreationAttributes {
   name: string;
@@ -59,4 +60,7 @@ export class User extends Model<User, UserCreationAttributes> {
     allowNull: true,
   })
   photo: Buffer;
+
+  @HasMany(() => Ad)
+  ads: Ad[];
 }
