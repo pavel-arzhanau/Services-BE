@@ -46,4 +46,25 @@ export class AdsService {
 
     return ads;
   }
+
+  async getAdById(id: number): Promise<Ad[]> {
+    const ad = await this.adRepository.findAll({
+      where: { id },
+      include: [
+        {
+          model: Subcategory,
+          include: [
+            {
+              model: Category,
+            },
+          ],
+        },
+        {
+          model: User,
+        },
+      ],
+    });
+
+    return ad;
+  }
 }
