@@ -1,18 +1,20 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CreateAdDto, IAd } from './dto';
 import { AdsService } from './ads.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('ads')
 export class AdsController {
   constructor(private readonly adService: AdsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  createUser(@Body() adDto: CreateAdDto): Promise<IAd> {
+  createAd(@Body() adDto: CreateAdDto): Promise<IAd> {
     return this.adService.createAd(adDto);
   }
 
   @Get(':categoryName/:subcategoryName')
-  async getAllAdsByCategoryAndSubcategory(
+  async getAllByCategoryAndSubcategory(
     @Param('categoryName') categoryName: string,
     @Param('subcategoryName') subcategoryName: string,
   ) {
@@ -22,5 +24,12 @@ export class AdsController {
     );
 
     return ads;
+  }
+
+  @Get('/:id')
+  async getById(@Param('id') id: number) {
+    const ad = await this.adService.getAdById(id);
+
+    return ad;
   }
 }
