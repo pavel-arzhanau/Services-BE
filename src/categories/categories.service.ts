@@ -15,10 +15,20 @@ export class CategoryService {
       include: Subcategory,
     });
 
-    return categoriesWithSubcategories.map((category) => ({
-      id: category.id,
-      name: category.name,
-      subcategories: category.subcategories,
-    }));
+    const sortedCategories = categoriesWithSubcategories
+      .map((category) => {
+        const sortedSubcategory = category.subcategories.sort((a, b) =>
+          a.name === 'other' ? 1 : b.name === 'other' ? -1 : 0,
+        );
+
+        return {
+          id: category.id,
+          name: category.name,
+          subcategories: sortedSubcategory,
+        };
+      })
+      .sort((a, b) => (a.name === 'other' ? 1 : b.name === 'other' ? -1 : 0));
+
+    return sortedCategories;
   }
 }
