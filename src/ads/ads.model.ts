@@ -5,9 +5,11 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
 import { Subcategory } from 'src/categories/subcategories.model';
 import { User } from 'src/users/users.model';
+import { Comment } from 'src/comment/comments.model';
 
 interface AdsCreationAttributes {
   userId: number;
@@ -61,4 +63,7 @@ export class Ad extends Model<Ad, AdsCreationAttributes> {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => Comment)
+  comments: Comment[];
 }

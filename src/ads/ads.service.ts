@@ -47,8 +47,8 @@ export class AdsService {
     return ads;
   }
 
-  async getAdById(id: number): Promise<Ad[]> {
-    const ad = await this.adRepository.findAll({
+  async getAdById(id: number): Promise<Ad> {
+    const ad = await this.adRepository.findOne({
       where: { id },
       include: [
         {

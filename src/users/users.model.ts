@@ -1,5 +1,6 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Ad } from 'src/ads/ads.model';
+import { Comment } from 'src/comment/comments.model';
 
 interface UserCreationAttributes {
   name: string;
@@ -63,4 +64,7 @@ export class User extends Model<User, UserCreationAttributes> {
 
   @HasMany(() => Ad)
   ads: Ad[];
+
+  @HasMany(() => Comment)
+  comments: Comment[];
 }
