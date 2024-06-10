@@ -126,6 +126,22 @@ export class AuthService {
     return token;
   }
 
+  async checkAuth(refreshToken: string) {
+    try {
+      const userData = this.validateRefreshToken(refreshToken);
+      if (userData) {
+        if (!userData) {
+          throw new UnauthorizedException();
+        }
+
+        const user = await this.userService.getUserById(userData.id);
+        return { user };
+      }
+    } catch (e) {
+      throw new UnauthorizedException();
+    }
+  }
+
   async refresh(refreshToken: string) {
     if (!refreshToken) {
       throw new UnauthorizedException();

@@ -76,6 +76,12 @@ export class AuthController {
     return res.send(200);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('test-auth-guard')
+  async testAuthGuard(@Req() req: Request, @Res() res: Response) {
+    return res.send(200);
+  }
+
   @Get('refresh')
   async refresh(@Req() req: Request, @Res() res: Response) {
     const { refreshToken: refreshTokenFromCookies } = req.cookies;
@@ -101,5 +107,30 @@ export class AuthController {
         rating: user.rating,
       },
     });
+  }
+
+  @Get('check-auth')
+  async checkAuth(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { refreshToken } = req.cookies;
+
+      const { user } = await this.authService.checkAuth(refreshToken);
+
+      return res.send({
+        user: {
+          id: user.id,
+          name: user.name,
+          description: user.description,
+          email: user.email,
+          phone: user.phone,
+          photo: user.photo,
+          rating: user.rating,
+        },
+      });
+    } catch (error) {
+      return res.send({
+        user: null,
+      });
+    }
   }
 }

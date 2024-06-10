@@ -5,6 +5,7 @@ import { Ad } from './ads.model';
 import { Subcategory } from 'src/categories/subcategories.model';
 import { Category } from 'src/categories/categories.model';
 import { User } from 'src/users/users.model';
+import { Comment } from 'src/comment/comments.model';
 
 @Injectable()
 export class AdsService {
@@ -41,6 +42,9 @@ export class AdsService {
         {
           model: User,
         },
+        {
+          model: Comment,
+        },
       ],
     });
 
@@ -61,6 +65,14 @@ export class AdsService {
         },
         {
           model: User,
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+            },
+          ],
         },
       ],
     });
